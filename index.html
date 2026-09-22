@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contra o Abuso | Conscientização e Apoio</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdf2f8; /* Tailwind pink-50 */
+            color: #4c1d95; /* Tailwind purple-900 for high contrast text */
+            scroll-behavior: smooth;
+        }
+
+        /* Custom subtle animations */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Delay classes for staggered animation */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+
+        /* Custom selection color */
+        ::selection {
+            background-color: #f472b6; /* Tailwind pink-400 */
+            color: white;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-light': '#ffe4e6',
+                        'rose-base': '#fb7185',
+                        'rose-dark': '#be123c',
+                        'pink-accent': '#db2777',
+                        'purple-dark': '#4c1d95'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative">
+
+    <!-- Global Toast (Notificações) -->
+    <div id="global-toast" class="fixed bottom-6 right-6 bg-purple-900 text-white px-6 py-3 rounded-xl shadow-2xl font-medium opacity-0 transition-all duration-300 z-[100] pointer-events-none transform translate-y-4">
+        Mensagem
+    </div>
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-rose-light shadow-sm">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tight text-pink-accent flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Não ao Silêncio
+            </a>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-purple-dark hover:text-pink-accent focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex gap-6 items-center font-medium">
+                <a href="#sobre" class="hover:text-pink-accent transition-colors duration-200">Sobre</a>
+                <a href="#tipos" class="hover:text-pink-accent transition-colors duration-200">Tipos de Violência</a>
+                <a href="#ajuda" class="hover:text-pink-accent transition-colors duration-200">Como Ajudar</a>
+                
+                <!-- Botão Bluetooth Desktop -->
+                <button id="bt-connect-btn" class="flex items-center gap-2 text-purple-dark hover:text-pink-accent transition-colors duration-200 text-sm font-semibold bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-full border border-rose-200 shadow-sm cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5-10 10"/></svg>
+                    Conectar Pulseira
+                </button>
+
+                <a href="#denuncie" class="text-rose-dark hover:text-pink-accent transition-colors duration-200 font-semibold border-b-2 border-transparent hover:border-pink-accent">Ligue 180</a>
+            </nav>
+        </div>
+
+        <!-- Mobile Nav (Hidden by default) -->
+        <nav id="mobile-menu" class="hidden md:hidden bg-white border-t border-rose-light px-6 py-4 flex-col gap-4 shadow-lg absolute w-full z-40">
+            <a href="#sobre" class="mobile-link block hover:text-pink-accent font-medium">Sobre</a>
+            <a href="#tipos" class="mobile-link block hover:text-pink-accent font-medium">Tipos de Violência</a>
+            <a href="#ajuda" class="mobile-link block hover:text-pink-accent font-medium">Como Ajudar</a>
+            
+            <!-- Botão Bluetooth Mobile -->
+            <button id="bt-connect-btn-mobile" class="mobile-link flex items-center justify-center gap-2 text-purple-dark font-semibold bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-lg border border-rose-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5-10 10"/></svg>
+                Conectar Pulseira
+            </button>
+
+            <a href="#denuncie" class="mobile-link block text-rose-dark font-bold text-center mt-2">Ligue 180 (Denuncie)</a>
+        </nav>
+    </header>
+
+    <main class="flex-grow">
+        <section class="max-w-6xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 space-y-8 fade-in-up">
+                <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-purple-dark">
+                    Você não está <span class="text-pink-accent relative inline-block">
+                        sozinha.
+                        <svg class="absolute w-full h-3 -bottom-1 left-0 text-rose-light -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                            <path d="M0 5 Q 50 10 100 5 L 100 10 L 0 10 Z" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed font-light">
+                    O silêncio protege o agressor, nunca a vítima. Reconhecer o abuso é o primeiro passo para quebrar o ciclo. Estamos aqui para informar, apoiar e encorajar a denúncia.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="#denuncie" class="bg-pink-accent hover:bg-rose-dark text-white px-8 py-4 rounded-full font-semibold text-center transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        Procurar Ajuda Agora
+                    </a>
+                    <a href="#tipos" class="bg-white hover:bg-rose-50 text-pink-accent border-2 border-pink-accent px-8 py-4 rounded-full font-semibold text-center transition-all">
+                        Entender os Sinais
+                    </a>
+                </div>
+            </div>
+            
+            <div class="md:w-1/2 w-full fade-in-up delay-200">
+                <!-- Conceptual Minimalist Art -->
+                <div class="relative w-full aspect-square max-w-md mx-auto">
+                    <div class="absolute inset-0 bg-rose-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
+                    <div class="absolute inset-4 bg-pink-100 rounded-[3rem] shadow-2xl flex items-center justify-center overflow-hidden border border-white/50">
+                        <svg class="w-32 h-32 text-pink-accent opacity-80" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <!-- Broken line symbolizing breaking the cycle -->
+                        <div class="absolute h-1 w-full bg-white transform -rotate-45 shadow-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tipos" class="bg-white py-20">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center max-w-2xl mx-auto mb-16 fade-in-up">
+                    <h2 class="text-3xl md:text-4xl font-bold text-purple-dark mb-4">Nem todo abuso deixa marcas físicas</h2>
+                    <p class="text-gray-600 text-lg">A violência contra a mulher se manifesta de diversas formas. Conhecer cada uma delas é fundamental para identificá-las.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-fdf2f8 border border-rose-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-100 group">
+                        <div class="w-14 h-14 bg-pink-100 text-pink-accent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-purple-dark mb-3">Violência Psicológica</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Qualquer conduta que cause dano emocional e diminuição da autoestima; que prejudique o pleno desenvolvimento ou que vise degradar ou controlar suas ações, comportamentos, crenças e decisões.</p>
+                        <ul class="mt-4 text-sm text-pink-accent space-y-1">
+                            <li>• Ameaças e humilhações</li>
+                            <li>• Isolamento de amigos/família</li>
+                            <li>• Gaslighting (manipulação)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-fdf2f8 border border-rose-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-200 group">
+                        <div class="w-14 h-14 bg-pink-100 text-pink-accent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-purple-dark mb-3">Violência Patrimonial</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Entendida como qualquer conduta que configure retenção, subtração, destruição parcial ou total de seus objetos, instrumentos de trabalho, documentos pessoais, bens, valores e direitos.</p>
+                        <ul class="mt-4 text-sm text-pink-accent space-y-1">
+                            <li>• Controle do seu dinheiro</li>
+                            <li>• Destruição de objetos pessoais</li>
+                            <li>• Ocultação de bens</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-fdf2f8 border border-rose-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-300 group">
+                        <div class="w-14 h-14 bg-pink-100 text-pink-accent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-purple-dark mb-3">Violência Física & Sexual</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Qualquer conduta que ofenda a integridade ou saúde corporal da mulher, bem como ações que a constranjam a presenciar, a manter ou a participar de relação sexual não desejada.</p>
+                        <ul class="mt-4 text-sm text-pink-accent space-y-1">
+                            <li>• Agressões (empurrões, tapas)</li>
+                            <li>• Relações forçadas</li>
+                            <li>• Impedir uso de contraceptivos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ajuda" class="py-20 bg-rose-50">
+            <div class="max-w-4xl mx-auto px-6 text-center fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-purple-dark mb-8">Como apoiar uma vítima?</h2>
+                
+                <div class="text-left space-y-6 bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-rose-100">
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-pink-100 text-pink-accent rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold mt-1">1</div>
+                        <div>
+                            <h4 class="text-lg font-bold text-purple-dark">Escute sem julgar</h4>
+                            <p class="text-gray-600">Muitas vezes, a vítima se sente culpada ou envergonhada. Ofereça um espaço seguro para ela falar, sem questionar suas escolhas anteriores.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-pink-100 text-pink-accent rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold mt-1">2</div>
+                        <div>
+                            <h4 class="text-lg font-bold text-purple-dark">Não pressione</h4>
+                            <p class="text-gray-600">Sair de um relacionamento abusivo é um processo complexo e perigoso. Respeite o tempo dela, mas deixe claro que você está lá para ajudar quando ela decidir agir.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-pink-100 text-pink-accent rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold mt-1">3</div>
+                        <div>
+                            <h4 class="text-lg font-bold text-purple-dark">Ofereça ajuda prática</h4>
+                            <p class="text-gray-600">Ajude a buscar informações sobre delegacias da mulher, centros de acolhimento, ou até mesmo abrigo temporário se ela precisar sair de casa às pressas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="denuncie" class="py-24 bg-pink-accent text-white text-center">
+            <div class="max-w-3xl mx-auto px-6 fade-in-up">
+                <svg class="w-16 h-16 mx-auto mb-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
+                <h2 class="text-4xl md:text-5xl font-black mb-4">Ligue 180</h2>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 font-light">Central de Atendimento à Mulher</p>
+                <p class="text-lg mb-10 max-w-xl mx-auto opacity-80">
+                    O serviço é gratuito, confidencial e funciona 24 horas por dia, todos os dias da semana. Você pode buscar orientação, denunciar ou pedir socorro.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="tel:180" class="bg-white text-pink-accent px-8 py-4 rounded-full font-bold text-lg hover:bg-rose-50 transition-colors shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        Ligar Agora
+                    </a>
+                    <button onclick="copyNumber()" class="bg-rose-dark hover:bg-rose-900 text-white border border-rose-400/30 px-8 py-4 rounded-full font-semibold text-lg transition-colors flex items-center justify-center gap-2">
+                        Copiar Número
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal de Emergência (Acionado via Bluetooth) -->
+        <div id="emergency-modal" class="fixed inset-0 bg-rose-900/95 backdrop-blur-md z-[100] hidden flex-col items-center justify-center p-6">
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl max-w-lg w-full text-center relative overflow-hidden fade-in-up">
+                <div class="absolute top-0 left-0 w-full h-3 bg-rose-dark animate-pulse"></div>
+                <div class="w-24 h-24 bg-rose-100 text-rose-dark rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-12 h-12 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h3 class="text-3xl font-black text-rose-dark mb-4">ALERTA RECEBIDO</h3>
+                <p class="text-gray-700 text-lg mb-8">O botão de emergência da pulseira foi acionado. A localização acaba de ser compartilhada com seus contatos de confiança (Protótipo).</p>
+                <button onclick="closeEmergencyModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-8 py-3 rounded-full font-semibold transition-colors">
+                    Desativar Alerta (Requer Senha)
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-purple-900 text-white/70 py-8 text-center text-sm">
+        <div class="max-w-6xl mx-auto px-6">
+            <p>&copy; 2026 Não ao Silêncio. Projeto fictício para conscientização.</p>
+            <p class="mt-2 text-xs">Em caso de emergência imediata, ligue 190 (Polícia Militar).</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const links = document.querySelectorAll('.mobile-link');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Copy number to clipboard functionality
+        function copyNumber() {
+            const el = document.createElement('textarea');
+            el.value = '180';
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            showToast('Número copiado para a área de transferência!');
+        }
+
+        // --- SISTEMA DE TOAST (Notificações Globais) ---
+        function showToast(message) {
+            const toast = document.getElementById('global-toast');
+            toast.innerText = message;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-4');
+            }, 4000);
+        }
+
+        // --- INTEGRAÇÃO BLUETOOTH (Web Bluetooth API) ---
+        const btConnectBtn = document.getElementById('bt-connect-btn');
+        const btConnectBtnMobile = document.getElementById('bt-connect-btn-mobile');
+        const emergencyModal = document.getElementById('emergency-modal');
+        let bluetoothDevice;
+        let panicCharacteristic;
+
+        // NOTA: Os UUIDs foram atualizados para corresponder EXATAMENTE ao código do ESP32!
+        const SERVICE_UUID = '4fa86700-477d-4151-8909-ab002b52d2f7';
+        const CHARACTERISTIC_UUID = '82b9e6e1-03e3-4921-9ae1-92f7ae72d423';
+
+        async function connectBluetooth() {
+            // Verifica se o navegador/dispositivo suporta Web Bluetooth
+            if (!navigator.bluetooth) {
+                showToast('Seu navegador não suporta conexão Bluetooth. Use o Google Chrome ou Edge.');
+                return;
+            }
+
+            try {
+                updateBtButtonState('Conectando...', false);
+                
+                // 1. Abre a janela nativa do sistema pedindo para o usuário escolher a pulseira
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ services: [SERVICE_UUID] }] // Só mostra os dispositivos que têm a nossa pulseira
+                });
+
+                // Se a pulseira perder conexão (descarregou ou afastou)
+                bluetoothDevice.addEventListener('gattserverdisconnected', onDisconnected);
+
+                // 2. Conecta ao "servidor" Bluetooth interno da pulseira
+                const server = await bluetoothDevice.gatt.connect();
+                
+                // 3. Pega o serviço e a característica que permite ler os cliques do botão
+                const service = await server.getPrimaryService(SERVICE_UUID);
+                panicCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+                // 4. "Ouve" ativamente quando a pulseira envia um sinal
+                await panicCharacteristic.startNotifications();
+                panicCharacteristic.addEventListener('characteristicvaluechanged', handlePulseiraSignal);
+
+                updateBtButtonState('Pulseira Conectada', true);
+                showToast('Pulseira pareada com sucesso! O botão está sendo monitorado.');
+
+            } catch (error) {
+                console.error('Erro de conexão Bluetooth:', error);
+                updateBtButtonState('Conectar Pulseira', false);
+                // Ignora erro se o usuário apenas fechou a aba de conectar
+                if(error.name !== 'NotFoundError') {
+                    showToast('Erro ao conectar: ' + error.message);
+                }
+            }
+        }
+
+        function onDisconnected() {
+            updateBtButtonState('Conectar Pulseira', false);
+            showToast('A pulseira foi desconectada. Tente aproximá-la novamente.');
+        }
+
+        function handlePulseiraSignal(event) {
+            // Quando a mulher aperta o botão na pulseira, o código cai aqui imediatamente.
+            console.log('SINAL DE EMERGÊNCIA RECEBIDO VIA BLUETOOTH!');
+            triggerEmergency();
+        }
+
+        function triggerEmergency() {
+            // Exibe a tela vermelha de emergência
+            emergencyModal.classList.remove('hidden');
+            emergencyModal.classList.add('flex');
+            
+            // Simula um apito sonoro rápido para confirmar o acionamento
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(900, audioCtx.currentTime);
+                oscillator.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.5); // Apita por meio segundo
+            } catch(e) {}
+            
+            // Lógica Futura: Aqui você conectaria uma API (ex: Twilio) para disparar
+            // SMS silenciosos com coordenadas GPS pegas usando navigator.geolocation
+        }
+
+        function closeEmergencyModal() {
+            // Num projeto real, o ideal é que só feche mediante um PIN/Senha,
+            // para que um agressor não possa simplesmente desligar o alarme se pegar o celular.
+            emergencyModal.classList.add('hidden');
+            emergencyModal.classList.remove('flex');
+        }
+
+        function updateBtButtonState(text, isConnected) {
+            const btns = [btConnectBtn, btConnectBtnMobile];
+            btns.forEach(btn => {
+                if (!btn) return;
+                if (isConnected) {
+                    btn.innerHTML = `<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ${text}`;
+                    btn.classList.replace('bg-rose-50', 'bg-emerald-50');
+                    btn.classList.replace('border-rose-200', 'border-emerald-200');
+                    btn.classList.replace('hover:bg-rose-100', 'hover:bg-emerald-100');
+                } else {
+                    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5-10 10"/></svg> ${text}`;
+                    btn.classList.replace('bg-emerald-50', 'bg-rose-50');
+                    btn.classList.replace('border-emerald-200', 'border-rose-200');
+                    btn.classList.replace('hover:bg-emerald-100', 'hover:bg-rose-100');
+                }
+            });
+        }
+
+        // Ativa os cliques nos botões
+        if(btConnectBtn) btConnectBtn.addEventListener('click', connectBluetooth);
+        if(btConnectBtnMobile) btConnectBtnMobile.addEventListener('click', connectBluetooth);
+
+        // Simple Intersection Observer for scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Pause animations initially if they are out of view
+        document.querySelectorAll('.fade-in-up').forEach((el) => {
+            
+        });
+    </script>
+</body>
+</html>
