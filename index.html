@@ -11,12 +11,11 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fdf2f8; /* Tailwind pink-50 */
-            color: #4c1d95; /* Tailwind purple-900 for high contrast text */
+            background-color: #fdf2f8;
+            color: #4c1d95;
             scroll-behavior: smooth;
         }
 
-        /* Custom subtle animations */
         .fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
             opacity: 0;
@@ -30,15 +29,13 @@
             }
         }
 
-        /* Delay classes for staggered animation */
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
         .delay-400 { animation-delay: 400ms; }
 
-        /* Custom selection color */
         ::selection {
-            background-color: #f472b6; /* Tailwind pink-400 */
+            background-color: #f472b6;
             color: white;
         }
     </style>
@@ -60,7 +57,6 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
 
-    <!-- Global Toast (Notificações) -->
     <div id="global-toast" class="fixed bottom-6 right-6 bg-purple-900 text-white px-6 py-3 rounded-xl shadow-2xl font-medium opacity-0 transition-all duration-300 z-[100] pointer-events-none transform translate-y-4">
         Mensagem
     </div>
@@ -74,40 +70,45 @@
                 Não ao Silêncio
             </a>
             
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden text-purple-dark hover:text-pink-accent focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
 
-            <!-- Desktop Nav -->
             <nav class="hidden md:flex gap-6 items-center font-medium">
                 <a href="#sobre" class="hover:text-pink-accent transition-colors duration-200">Sobre</a>
                 <a href="#tipos" class="hover:text-pink-accent transition-colors duration-200">Tipos de Violência</a>
-                <a href="#ajuda" class="hover:text-pink-accent transition-colors duration-200">Como Ajudar</a>
                 
-                <!-- Botão Bluetooth Desktop -->
                 <button id="bt-connect-btn" class="flex items-center gap-2 text-purple-dark hover:text-pink-accent transition-colors duration-200 text-sm font-semibold bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-full border border-rose-200 shadow-sm cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5-10 10"/></svg>
                     Conectar Pulseira
                 </button>
 
+                <!-- BOTÃO DE DOWNLOAD DO APK (DESKTOP) -->
+                <a href="app-debug.apk" download="NaoAoSilencio.apk" class="flex items-center gap-2 text-white bg-pink-accent hover:bg-rose-dark transition-colors duration-200 text-sm font-semibold px-4 py-2 rounded-full shadow-sm cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    Baixar App
+                </a>
+
                 <a href="#denuncie" class="text-rose-dark hover:text-pink-accent transition-colors duration-200 font-semibold border-b-2 border-transparent hover:border-pink-accent">Ligue 180</a>
             </nav>
         </div>
 
-        <!-- Mobile Nav (Hidden by default) -->
         <nav id="mobile-menu" class="hidden md:hidden bg-white border-t border-rose-light px-6 py-4 flex-col gap-4 shadow-lg absolute w-full z-40">
             <a href="#sobre" class="mobile-link block hover:text-pink-accent font-medium">Sobre</a>
             <a href="#tipos" class="mobile-link block hover:text-pink-accent font-medium">Tipos de Violência</a>
-            <a href="#ajuda" class="mobile-link block hover:text-pink-accent font-medium">Como Ajudar</a>
             
-            <!-- Botão Bluetooth Mobile -->
             <button id="bt-connect-btn-mobile" class="mobile-link flex items-center justify-center gap-2 text-purple-dark font-semibold bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-lg border border-rose-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5-10 10"/></svg>
                 Conectar Pulseira
             </button>
+
+            <!-- BOTÃO DE DOWNLOAD DO APK (MOBILE) -->
+            <a href="app-debug.apk" download="NaoAoSilencio.apk" class="mobile-link flex items-center justify-center gap-2 text-white bg-pink-accent hover:bg-rose-dark font-semibold px-4 py-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                Baixar App (Android)
+            </a>
 
             <a href="#denuncie" class="mobile-link block text-rose-dark font-bold text-center mt-2">Ligue 180 (Denuncie)</a>
         </nav>
@@ -127,25 +128,30 @@
                 <p class="text-lg md:text-xl text-gray-700 leading-relaxed font-light">
                     O silêncio protege o agressor, nunca a vítima. Reconhecer o abuso é o primeiro passo para quebrar o ciclo. Estamos aqui para informar, apoiar e encorajar a denúncia.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="#denuncie" class="bg-pink-accent hover:bg-rose-dark text-white px-8 py-4 rounded-full font-semibold text-center transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                        Procurar Ajuda Agora
+                
+                <!-- BOTÕES DA SEÇÃO PRINCIPAL ATUALIZADOS -->
+                <div class="flex flex-col sm:flex-row flex-wrap gap-4 pt-4">
+                    <a href="#denuncie" class="bg-pink-accent hover:bg-rose-dark text-white px-6 py-3 rounded-full font-semibold text-center transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        Procurar Ajuda
                     </a>
-                    <a href="#tipos" class="bg-white hover:bg-rose-50 text-pink-accent border-2 border-pink-accent px-8 py-4 rounded-full font-semibold text-center transition-all">
-                        Entender os Sinais
+                    <a href="app-debug.apk" download="NaoAoSilencio.apk" class="bg-purple-dark hover:bg-purple-800 text-white px-6 py-3 rounded-full font-semibold text-center transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        Baixar App
+                    </a>
+                    <a href="#tipos" class="bg-white hover:bg-rose-50 text-pink-accent border-2 border-pink-accent px-6 py-3 rounded-full font-semibold text-center transition-all">
+                        Entender Sinais
                     </a>
                 </div>
+
             </div>
             
             <div class="md:w-1/2 w-full fade-in-up delay-200">
-                <!-- Conceptual Minimalist Art -->
                 <div class="relative w-full aspect-square max-w-md mx-auto">
                     <div class="absolute inset-0 bg-rose-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
                     <div class="absolute inset-4 bg-pink-100 rounded-[3rem] shadow-2xl flex items-center justify-center overflow-hidden border border-white/50">
                         <svg class="w-32 h-32 text-pink-accent opacity-80" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
-                        <!-- Broken line symbolizing breaking the cycle -->
                         <div class="absolute h-1 w-full bg-white transform -rotate-45 shadow-sm"></div>
                     </div>
                 </div>
@@ -160,7 +166,6 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Card 1 -->
                     <div class="bg-fdf2f8 border border-rose-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-100 group">
                         <div class="w-14 h-14 bg-pink-100 text-pink-accent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
@@ -174,7 +179,6 @@
                         </ul>
                     </div>
 
-                    <!-- Card 2 -->
                     <div class="bg-fdf2f8 border border-rose-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-200 group">
                         <div class="w-14 h-14 bg-pink-100 text-pink-accent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -188,7 +192,6 @@
                         </ul>
                     </div>
 
-                    <!-- Card 3 -->
                     <div class="bg-fdf2f8 border border-rose-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-300 group">
                         <div class="w-14 h-14 bg-pink-100 text-pink-accent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01"></path></svg>
@@ -260,7 +263,6 @@
             </div>
         </section>
 
-        <!-- Modal de Emergência (Acionado via Bluetooth) -->
         <div id="emergency-modal" class="fixed inset-0 bg-rose-900/95 backdrop-blur-md z-[100] hidden flex-col items-center justify-center p-6">
             <div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl max-w-lg w-full text-center relative overflow-hidden fade-in-up">
                 <div class="absolute top-0 left-0 w-full h-3 bg-rose-dark animate-pulse"></div>
@@ -285,7 +287,6 @@
     </footer>
 
     <script>
-        // Mobile Menu Toggle
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
         const links = document.querySelectorAll('.mobile-link');
@@ -294,14 +295,12 @@
             menu.classList.toggle('hidden');
         });
 
-        // Close mobile menu when a link is clicked
         links.forEach(link => {
             link.addEventListener('click', () => {
                 menu.classList.add('hidden');
             });
         });
 
-        // Copy number to clipboard functionality
         function copyNumber() {
             const el = document.createElement('textarea');
             el.value = '180';
@@ -313,7 +312,6 @@
             showToast('Número copiado para a área de transferência!');
         }
 
-        // --- SISTEMA DE TOAST (Notificações Globais) ---
         function showToast(message) {
             const toast = document.getElementById('global-toast');
             toast.innerText = message;
@@ -326,19 +324,16 @@
             }, 4000);
         }
 
-        // --- INTEGRAÇÃO BLUETOOTH (Web Bluetooth API) ---
         const btConnectBtn = document.getElementById('bt-connect-btn');
         const btConnectBtnMobile = document.getElementById('bt-connect-btn-mobile');
         const emergencyModal = document.getElementById('emergency-modal');
         let bluetoothDevice;
         let panicCharacteristic;
 
-        // NOTA: Os UUIDs foram atualizados para corresponder EXATAMENTE ao código do ESP32!
         const SERVICE_UUID = '4fa86700-477d-4151-8909-ab002b52d2f7';
         const CHARACTERISTIC_UUID = '82b9e6e1-03e3-4921-9ae1-92f7ae72d423';
 
         async function connectBluetooth() {
-            // Verifica se o navegador/dispositivo suporta Web Bluetooth
             if (!navigator.bluetooth) {
                 showToast('Seu navegador não suporta conexão Bluetooth. Use o Google Chrome ou Edge.');
                 return;
@@ -347,22 +342,16 @@
             try {
                 updateBtButtonState('Conectando...', false);
                 
-                // 1. Abre a janela nativa do sistema pedindo para o usuário escolher a pulseira
                 bluetoothDevice = await navigator.bluetooth.requestDevice({
-                    filters: [{ services: [SERVICE_UUID] }] // Só mostra os dispositivos que têm a nossa pulseira
+                    filters: [{ services: [SERVICE_UUID] }]
                 });
 
-                // Se a pulseira perder conexão (descarregou ou afastou)
                 bluetoothDevice.addEventListener('gattserverdisconnected', onDisconnected);
 
-                // 2. Conecta ao "servidor" Bluetooth interno da pulseira
                 const server = await bluetoothDevice.gatt.connect();
-                
-                // 3. Pega o serviço e a característica que permite ler os cliques do botão
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 panicCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                // 4. "Ouve" ativamente quando a pulseira envia um sinal
                 await panicCharacteristic.startNotifications();
                 panicCharacteristic.addEventListener('characteristicvaluechanged', handlePulseiraSignal);
 
@@ -372,7 +361,6 @@
             } catch (error) {
                 console.error('Erro de conexão Bluetooth:', error);
                 updateBtButtonState('Conectar Pulseira', false);
-                // Ignora erro se o usuário apenas fechou a aba de conectar
                 if(error.name !== 'NotFoundError') {
                     showToast('Erro ao conectar: ' + error.message);
                 }
@@ -385,17 +373,14 @@
         }
 
         function handlePulseiraSignal(event) {
-            // Quando a mulher aperta o botão na pulseira, o código cai aqui imediatamente.
             console.log('SINAL DE EMERGÊNCIA RECEBIDO VIA BLUETOOTH!');
             triggerEmergency();
         }
 
         function triggerEmergency() {
-            // Exibe a tela vermelha de emergência
             emergencyModal.classList.remove('hidden');
             emergencyModal.classList.add('flex');
             
-            // Simula um apito sonoro rápido para confirmar o acionamento
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioCtx.createOscillator();
@@ -403,16 +388,11 @@
                 oscillator.frequency.setValueAtTime(900, audioCtx.currentTime);
                 oscillator.connect(audioCtx.destination);
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.5); // Apita por meio segundo
+                oscillator.stop(audioCtx.currentTime + 0.5);
             } catch(e) {}
-            
-            // Lógica Futura: Aqui você conectaria uma API (ex: Twilio) para disparar
-            // SMS silenciosos com coordenadas GPS pegas usando navigator.geolocation
         }
 
         function closeEmergencyModal() {
-            // Num projeto real, o ideal é que só feche mediante um PIN/Senha,
-            // para que um agressor não possa simplesmente desligar o alarme se pegar o celular.
             emergencyModal.classList.add('hidden');
             emergencyModal.classList.remove('flex');
         }
@@ -435,11 +415,9 @@
             });
         }
 
-        // Ativa os cliques nos botões
         if(btConnectBtn) btConnectBtn.addEventListener('click', connectBluetooth);
         if(btConnectBtnMobile) btConnectBtnMobile.addEventListener('click', connectBluetooth);
 
-        // Simple Intersection Observer for scroll animations
         const observerOptions = {
             root: null,
             rootMargin: '0px',
@@ -455,7 +433,6 @@
             });
         }, observerOptions);
 
-        // Pause animations initially if they are out of view
         document.querySelectorAll('.fade-in-up').forEach((el) => {
             
         });
